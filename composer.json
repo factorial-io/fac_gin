@@ -1,0 +1,13 @@
+{
+    "name": "factorial-io/fac_gin",
+    "description": "Factorials modification for the gin admin theme",
+    "type": "drupal-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Stephan Huber",
+            "email": "stephan@factorial.io"
+        }
+    ],
+    "require": {}
+}
