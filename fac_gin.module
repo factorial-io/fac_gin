@@ -1,0 +1,83 @@
+<?php
+
+/**
+ * @file
+ * Contains fac_gin.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_help().
+ */
+function fac_gin_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the fac_gin module.
+    case 'help.page.fac_gin':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Factorial Gin integration') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_implements_alter().
+ */
+function fac_gin_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'form_alter') {
+
+    // Move my_module_rdf_mapping() to the end of the list. module_implements()
+    // iterates through $implementations with a foreach loop which PHP iterates
+    // in the order that the items were added, so to move an item to the end of
+    // the array, we remove it and then add it.
+    $group = $implementations['fac_gin'];
+    unset($implementations['fac_gin']);
+    $implementations['fac_gin'] = $group;
+  }
+}
+
+/**
+ * Add gitlab link to gins login form.
+ */
+function fac_gin_form_alter(&$form, $form_state, $form_id) {
+  if (strpos($form_id, 'user_login') !== FALSE) {
+    $form['more-links']['gitlab'] = [
+      '#type' => 'link',
+      '#url' => Url::fromRoute('externalauth_gitlab.login_controller_login'),
+      '#title' => t('Login with gitlab'),
+      '#attributes' => [
+        'class' => [
+          'gitlab-button',
+          'button',
+          'button--secondary',
+        ],
+      ],
+      '#weight' => '1',
+    ];
+  }
+}
+
+/**
+ * Implements hook_theme_alter().
+ */
+function fac_gin_theme_registry_alter(&$theme) {
+  foreach ([
+    'page__user__login',
+    'page__user__password',
+    'page__user__register',
+  ] as $key) {
+    $theme[$key]['preprocess functions'][] = 'fac_gin_preprocess_ginlogin';
+  }
+}
+
+/**
+ * Use factorials logo as log for gin.
+ */
+function fac_gin_preprocess_ginlogin(&$variables) {
+  $variables['logo'] = 'https://logo.factorial.io/color.svg';
+  $variables['brand_image'] = 'https://bo.factorial.io/sites/default/files/styles/hero_image__large__2x/public/2020-04/_99B9048.jpg.webp?h=4fb65a68&itok=6g4BbMKZ';
+}
