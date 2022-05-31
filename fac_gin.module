@@ -78,6 +78,6 @@ function fac_gin_theme_registry_alter(&$theme) {
  * Use factorials logo as log for gin.
  */
 function fac_gin_preprocess_ginlogin(&$variables) {
-  $variables['logo'] = 'https://logo.factorial.io/color.svg';
+  $variables['icon_path'] = 'https://logo.factorial.io/color.svg';
   $variables['brand_image'] = 'https://bo.factorial.io/sites/default/files/styles/hero_image__large__2x/public/2020-04/_99B9048.jpg.webp?h=4fb65a68&itok=6g4BbMKZ';
 }
